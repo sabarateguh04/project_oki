@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buat Tiket - Maintenance System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.tech-pick{ border:1px solid var(--border); border-radius:12px; padding:12px; cursor:pointer; transition:.15s; }
+.tech-pick:hover{ border-color:#0d6efd; }
+.tech-pick.selected{ border-color:#0d6efd; background:#f0f6ff; box-shadow:0 0 0 2px rgba(13,110,253,.15); }
+.tech-pick .tech-avatar{ width:44px; height:44px; }
+.spec-badge{ background:#e7f0ff; color:#0b5ed7; font-weight:600; font-size:10.5px; padding:3px 8px; border-radius:20px; margin:1px; display:inline-block; }
+.area-badge{ background:#f1e9fb; color:#6f42c1; font-weight:600; font-size:10.5px; padding:3px 8px; border-radius:20px; margin:1px; display:inline-block; }
+.match-tag{ font-size:11px; font-weight:700; color:#198754; }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="content">
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+<div class="container-fluid">
+<h4 class="mb-0">Buat Tiket Baru</h4>
+<div class="d-flex align-items-center">
+<span id="roleBadge" class="me-3"></span>
+<i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
+<b id="username"></b>
+</div>
+</div>
+</nav>
+
+<div class="container-fluid mt-4 mb-5">
+
+<form onsubmit="return simpanOrder(event)">
+
+<!-- ============ 1. INFO TIKET ============ -->
+<div class="card shadow-sm mb-3">
+<div class="card-header"><h6 class="mb-0"><i class="bi bi-1-circle-fill text-primary"></i> Info Tiket</h6></div>
+<div class="card-body">
+<div class="row g-3">
+
+<div class="col-md-6">
+<label class="form-label">Customer</label>
+<select class="form-select" required>
+<option value="">Pilih customer</option>
+<option>PT ABC Indonesia</option>
+<option>PT XYZ</option>
+<option>PT DEF</option>
+<option>PT Mega Persada</option>
+<option>PT Sinar Jaya</option>
+<option>PT Cahaya Abadi</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Nomor Order</label>
+<input type="text" class="form-control" value="ORD-00009" readonly>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Kategori Pekerjaan</label>
+<select class="form-select" id="kategori" onchange="rekomendasiTeknisi()" required>
+<option value="">Pilih kategori</option>
+<option value="AC & Pendingin">AC &amp; Pendingin</option>
+<option value="Kelistrikan">Kelistrikan</option>
+<option value="Plumbing">Plumbing / Pipa</option>
+<option value="Jaringan">Jaringan / Networking</option>
+<option value="CCTV">CCTV</option>
+<option value="Genset">Genset</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Wilayah Lokasi</label>
+<select class="form-select" id="wilayah" onchange="rekomendasiTeknisi()" required>
+<option value="">Pilih wilayah</option>
+<option value="Depok">Depok</option>
+<option value="Jakarta Selatan">Jakarta Selatan</option>
+<option value="Jakarta Pusat">Jakarta Pusat</option>
+<option value="Jakarta Barat">Jakarta Barat</option>
+<option value="Bogor">Bogor</option>
+<option value="Tangerang">Tangerang</option>
+<option value="Bekasi">Bekasi</option>
+</select>
+</div>
+
+<div class="col-12">
+<label class="form-label">Deskripsi Keluhan / Pekerjaan</label>
+<textarea class="form-control" rows="3" placeholder="Jelaskan detail pekerjaan yang perlu dilakukan..." required></textarea>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Prioritas</label>
+<select class="form-select">
+<option>Normal</option>
+<option>Tinggi</option>
+<option>Urgent</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Tanggal Dibutuhkan</label>
+<input type="date" class="form-control today">
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- ============ 2. ASSIGN TEKNISI ============ -->
+<div class="card shadow-sm mb-3">
+<div class="card-header">
+<h6 class="mb-0"><i class="bi bi-2-circle-fill text-primary"></i> Assign Teknisi</h6>
+<div class="text-muted" style="font-size:12.5px;">Rekomendasi otomatis muncul setelah kategori &amp; wilayah dipilih, berdasarkan spesialisasi dan cakupan area teknisi</div>
+</div>
+<div class="card-body">
+
+<div id="techEmpty" class="empty-state">
+<i class="bi bi-person-badge"></i>
+Pilih kategori pekerjaan &amp; wilayah lokasi dulu untuk melihat teknisi yang kompeten
+</div>
+
+<div class="row g-3" id="techGrid" style="display:none;"></div>
+
+<input type="hidden" id="selectedTeknisi" required>
+
+</div>
+</div>
+
+<!-- ============ 3. RINCIAN BIAYA & TIMING PEMBAYARAN ============ -->
+<div class="card shadow-sm mb-3">
+<div class="card-header">
+<h6 class="mb-0"><i class="bi bi-3-circle-fill text-primary"></i> Rincian Biaya &amp; Timing Pembayaran</h6>
+<div class="text-muted" style="font-size:12.5px;">Tentukan tiap komponen biaya dibayar sebelum atau sesudah pekerjaan selesai &mdash; ini menentukan kapan Finance memproses transfer</div>
+</div>
+<div class="card-body">
+
+<div id="biayaList">
+
+<div class="row g-2 align-items-center mb-2 biaya-row">
+<div class="col-md-3">
+<select class="form-select form-select-sm">
+<option>Jasa Teknisi</option>
+<option>Ongkos / Transport</option>
+<option>Material / Sparepart</option>
+<option>Lainnya</option>
+</select>
+</div>
+<div class="col-md-4">
+<input type="text" class="form-control form-control-sm" placeholder="Keterangan (mis. Jasa servis AC)">
+</div>
+<div class="col-md-2">
+<input type="number" class="form-control form-control-sm" placeholder="Nominal (Rp)">
+</div>
+<div class="col-md-2">
+<select class="form-select form-select-sm">
+<option value="sebelum">Bayar Sebelum</option>
+<option value="sesudah" selected>Bayar Sesudah</option>
+</select>
+</div>
+<div class="col-md-1">
+<button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.biaya-row').remove()"><i class="bi bi-trash"></i></button>
+</div>
+</div>
+
+</div>
+
+<button type="button" class="btn btn-sm btn-outline-primary" onclick="addBiayaRow()">
+<i class="bi bi-plus-lg"></i> Tambah Komponen Biaya
+</button>
+
+<hr>
+
+<div class="form-check">
+<input class="form-check-input" type="checkbox" id="prebayarCheck" onchange="togglePrebayar()">
+<label class="form-check-label" for="prebayarCheck">
+Ada kebutuhan yang harus dibeli / ditransfer <b>sebelum</b> tiket di-assign ke teknisi (mis. beli modem, sparepart khusus)
+</label>
+</div>
+
+<div id="prebayarDetail" class="row g-2 mt-2" style="display:none;">
+<div class="col-md-6">
+<input type="text" class="form-control form-control-sm" placeholder="Keperluan (mis. Beli modem baru)">
+</div>
+<div class="col-md-3">
+<input type="number" class="form-control form-control-sm" placeholder="Nominal (Rp)">
+</div>
+<div class="col-md-3">
+<div class="alert alert-warning py-1 px-2 mb-0" style="font-size:11.5px;">
+<i class="bi bi-info-circle"></i> Finance akan cek &amp; TF dulu sebelum tiket jalan
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="d-flex justify-content-end gap-2">
+<a href="orders.html" class="btn btn-outline-secondary">Batal</a>
+<button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Simpan &amp; Kirim ke Atasan</button>
+</div>
+
+</form>
+
+</div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+
+renderSidebar("form-order");
+
+const TEKNISI_DB = [
+    { nama:"Andi Wijaya",    spec:["AC & Pendingin","Kelistrikan"], area:["Depok","Jakarta Selatan"], rating:4.8, order:34, color:"0d6efd" },
+    { nama:"Budi Santoso",   spec:["Jaringan","CCTV"],               area:["Jakarta Pusat","Jakarta Barat"], rating:4.6, order:29, color:"198754" },
+    { nama:"Joko Prasetyo",  spec:["Plumbing","Genset"],             area:["Depok","Bogor"], rating:4.5, order:25, color:"fd7e14" },
+    { nama:"Rian Saputra",   spec:["Kelistrikan","Genset"],          area:["Tangerang","Jakarta Barat"], rating:4.7, order:21, color:"6f42c1" },
+    { nama:"Dedi Kurniawan", spec:["AC & Pendingin"],                area:["Bekasi"], rating:4.3, order:15, color:"6c757d" }
+];
+
+function rekomendasiTeknisi(){
+
+    const kategori = document.getElementById("kategori").value;
+    const wilayah = document.getElementById("wilayah").value;
+
+    if (!kategori || !wilayah){
+        document.getElementById("techEmpty").style.display = "block";
+        document.getElementById("techGrid").style.display = "none";
+        return;
+    }
+
+    const matches = TEKNISI_DB.map(t => {
+        const specMatch = t.spec.includes(kategori);
+        const areaMatch = t.area.includes(wilayah);
+        return { ...t, specMatch, areaMatch, score: (specMatch?2:0) + (areaMatch?1:0) };
+    }).sort((a,b) => b.score - a.score);
+
+    const grid = document.getElementById("techGrid");
+    grid.innerHTML = "";
+
+    matches.forEach((t, i) => {
+        let tag = "";
+        if (t.specMatch && t.areaMatch) tag = '<span class="match-tag"><i class="bi bi-check-circle-fill"></i> Cocok kategori &amp; wilayah</span>';
+        else if (t.specMatch) tag = '<span class="match-tag" style="color:#fd7e14;"><i class="bi bi-check-circle"></i> Cocok kategori, luar wilayah</span>';
+        else if (t.areaMatch) tag = '<span class="match-tag" style="color:#6c757d;"><i class="bi bi-geo"></i> Satu wilayah saja</span>';
+        else tag = '<span class="match-tag" style="color:#adb5bd;">Tidak match kategori/wilayah</span>';
+
+        grid.innerHTML += `
+        <div class="col-md-6 col-lg-4">
+        <div class="tech-pick" onclick="pilihTeknisi(this,'${t.nama}')">
+            <div class="d-flex align-items-center mb-2">
+                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t.nama)}&background=${t.color}&color=fff" class="tech-avatar me-2">
+                <div>
+                    <div class="tech-name">${t.nama}</div>
+                    <div class="tech-meta">&#9733; ${t.rating} &middot; ${t.order} order selesai</div>
+                </div>
+            </div>
+            <div class="mb-1">${t.spec.map(s=>`<span class="spec-badge">${s}</span>`).join("")}</div>
+            <div class="mb-2">${t.area.map(a=>`<span class="area-badge">${a}</span>`).join("")}</div>
+            ${tag}
+        </div>
+        </div>`;
+    });
+
+    document.getElementById("techEmpty").style.display = "none";
+    grid.style.display = "flex";
+
+}
+
+function pilihTeknisi(el, nama){
+    document.querySelectorAll(".tech-pick").forEach(e => e.classList.remove("selected"));
+    el.classList.add("selected");
+    document.getElementById("selectedTeknisi").value = nama;
+}
+
+function addBiayaRow(){
+    const wrap = document.getElementById("biayaList");
+    const div = document.createElement("div");
+    div.className = "row g-2 align-items-center mb-2 biaya-row";
+    div.innerHTML = `
+        <div class="col-md-3">
+            <select class="form-select form-select-sm">
+                <option>Jasa Teknisi</option>
+                <option>Ongkos / Transport</option>
+                <option>Material / Sparepart</option>
+                <option>Lainnya</option>
+            </select>
+        </div>
+        <div class="col-md-4"><input type="text" class="form-control form-control-sm" placeholder="Keterangan"></div>
+        <div class="col-md-2"><input type="number" class="form-control form-control-sm" placeholder="Nominal (Rp)"></div>
+        <div class="col-md-2">
+            <select class="form-select form-select-sm">
+                <option value="sebelum">Bayar Sebelum</option>
+                <option value="sesudah" selected>Bayar Sesudah</option>
+            </select>
+        </div>
+        <div class="col-md-1"><button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.biaya-row').remove()"><i class="bi bi-trash"></i></button></div>
+    `;
+    wrap.appendChild(div);
+}
+
+function togglePrebayar(){
+    document.getElementById("prebayarDetail").style.display =
+        document.getElementById("prebayarCheck").checked ? "flex" : "none";
+}
+
+function simpanOrder(e){
+    e.preventDefault();
+
+    if (!document.getElementById("selectedTeknisi").value){
+        toast("Pilih teknisi yang akan di-assign dulu ya");
+        return false;
+    }
+
+    toast("Tiket berhasil dibuat, dikirim ke Atasan untuk approval");
+    setTimeout(()=>{ window.location.href = "orders.html"; }, 900);
+    return false;
+}
+
+</script>
+
+</body>
+</html>

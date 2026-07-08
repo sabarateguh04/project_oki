@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Teknisi - Maintenance System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.spec-badge{ background:#e7f0ff; color:#0b5ed7; font-weight:600; font-size:11px; padding:4px 9px; border-radius:20px; margin:2px; display:inline-block; }
+.area-badge{ background:#f1e9fb; color:#6f42c1; font-weight:600; font-size:11px; padding:4px 9px; border-radius:20px; margin:2px; display:inline-block; }
+.cert-item{ display:flex; align-items:flex-start; gap:8px; padding:8px 0; border-bottom:1px solid #f0f1f4; }
+.cert-item:last-child{ border-bottom:none; }
+.cert-item i{ color:#198754; margin-top:2px; }
+.tech-profile-avatar{ width:78px; height:78px; border-radius:50%; object-fit:cover; }
+.rating-stars{ color:#fd7e14; font-size:14px; }
+.check-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px 14px; }
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="content">
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+<div class="container-fluid">
+<h4 class="mb-0">Data Teknisi</h4>
+<div class="d-flex align-items-center">
+<span id="roleBadge" class="me-3"></span>
+<i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
+<b id="username"></b>
+</div>
+</div>
+</nav>
+
+<div class="container-fluid mt-4">
+
+<div class="card shadow-sm">
+<div class="card-body">
+
+<div class="row mb-3 g-2">
+<div class="col-md-3">
+<input class="form-control" id="search" placeholder="Cari nama teknisi..." onkeyup="searchTable('search','techTable')">
+</div>
+<div class="col-md-3">
+<select class="form-select" id="specFilter" onchange="filterSpec()">
+<option value="">Semua Spesialisasi</option>
+<option value="AC & Pendingin">AC &amp; Pendingin</option>
+<option value="Kelistrikan">Kelistrikan</option>
+<option value="Plumbing">Plumbing / Pipa</option>
+<option value="Jaringan">Jaringan / Networking</option>
+<option value="CCTV">CCTV</option>
+<option value="Genset">Genset</option>
+</select>
+</div>
+<div class="col-md-3">
+<select class="form-select" id="areaFilter" onchange="filterArea()">
+<option value="">Semua Wilayah</option>
+<option value="Depok">Depok</option>
+<option value="Jakarta Selatan">Jakarta Selatan</option>
+<option value="Jakarta Pusat">Jakarta Pusat</option>
+<option value="Jakarta Barat">Jakarta Barat</option>
+<option value="Bogor">Bogor</option>
+<option value="Tangerang">Tangerang</option>
+<option value="Bekasi">Bekasi</option>
+</select>
+</div>
+<div class="col-md-3 text-md-end">
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTeknisi">
+<i class="bi bi-plus-circle"></i> Tambah Teknisi
+</button>
+</div>
+</div>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle" id="techTable">
+<thead class="table-light">
+<tr>
+<th>Teknisi</th>
+<th>Spesialisasi</th>
+<th>Wilayah Kerja</th>
+<th>Sertifikasi</th>
+<th>Rating</th>
+<th>GPS</th>
+<th width="150">Aksi</th>
+</tr>
+</thead>
+<tbody>
+
+<tr data-spec="AC & Pendingin,Kelistrikan" data-area="Depok,Jakarta Selatan">
+<td>
+<div class="d-flex align-items-center">
+<img src="https://ui-avatars.com/api/?name=Andi+Wijaya&background=0d6efd&color=fff" class="tech-avatar">
+<div>
+<div class="tech-name">Andi Wijaya</div>
+<div class="tech-meta">081212121212</div>
+</div>
+</div>
+</td>
+<td><span class="spec-badge">AC &amp; Pendingin</span><span class="spec-badge">Kelistrikan</span></td>
+<td><span class="area-badge">Depok</span><span class="area-badge">Jakarta Selatan</span></td>
+<td>2 sertifikat</td>
+<td><span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.8</td>
+<td><span class="badge bg-success"><span class="dot dot-green"></span>Ready</span></td>
+<td>
+<button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profileAndi"><i class="bi bi-eye"></i></button>
+<button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+<button onclick="deleteRow(this)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+</td>
+</tr>
+
+<tr data-spec="Jaringan,CCTV" data-area="Jakarta Pusat,Jakarta Barat">
+<td>
+<div class="d-flex align-items-center">
+<img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=198754&color=fff" class="tech-avatar">
+<div>
+<div class="tech-name">Budi Santoso</div>
+<div class="tech-meta">081300000000</div>
+</div>
+</div>
+</td>
+<td><span class="spec-badge">Jaringan / Networking</span><span class="spec-badge">CCTV</span></td>
+<td><span class="area-badge">Jakarta Pusat</span><span class="area-badge">Jakarta Barat</span></td>
+<td>2 sertifikat</td>
+<td><span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.6</td>
+<td><span class="badge bg-success"><span class="dot dot-green"></span>Ready</span></td>
+<td>
+<button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profileBudi"><i class="bi bi-eye"></i></button>
+<button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+<button onclick="deleteRow(this)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+</td>
+</tr>
+
+<tr data-spec="Plumbing,Genset" data-area="Depok,Bogor">
+<td>
+<div class="d-flex align-items-center">
+<img src="https://ui-avatars.com/api/?name=Joko+Prasetyo&background=fd7e14&color=fff" class="tech-avatar">
+<div>
+<div class="tech-name">Joko Prasetyo</div>
+<div class="tech-meta">081399998888</div>
+</div>
+</div>
+</td>
+<td><span class="spec-badge">Plumbing / Pipa</span><span class="spec-badge">Genset</span></td>
+<td><span class="area-badge">Depok</span><span class="area-badge">Bogor</span></td>
+<td>1 sertifikat</td>
+<td><span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4.5</td>
+<td><span class="badge bg-warning text-dark"><span class="dot dot-orange"></span>Menuju lokasi</span></td>
+<td>
+<button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profileJoko"><i class="bi bi-eye"></i></button>
+<button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+<button onclick="deleteRow(this)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+</td>
+</tr>
+
+<tr data-spec="Kelistrikan,Genset" data-area="Tangerang,Jakarta Barat">
+<td>
+<div class="d-flex align-items-center">
+<img src="https://ui-avatars.com/api/?name=Rian+Saputra&background=6f42c1&color=fff" class="tech-avatar">
+<div>
+<div class="tech-name">Rian Saputra</div>
+<div class="tech-meta">081355556666</div>
+</div>
+</div>
+</td>
+<td><span class="spec-badge">Kelistrikan</span><span class="spec-badge">Genset</span></td>
+<td><span class="area-badge">Tangerang</span><span class="area-badge">Jakarta Barat</span></td>
+<td>2 sertifikat</td>
+<td><span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.7</td>
+<td><span class="badge bg-success"><span class="dot dot-green"></span>Ready</span></td>
+<td>
+<button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profileRian"><i class="bi bi-eye"></i></button>
+<button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+<button onclick="deleteRow(this)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+</td>
+</tr>
+
+<tr data-spec="AC & Pendingin" data-area="Bekasi">
+<td>
+<div class="d-flex align-items-center">
+<img src="https://ui-avatars.com/api/?name=Dedi+Kurniawan&background=6c757d&color=fff" class="tech-avatar">
+<div>
+<div class="tech-name">Dedi Kurniawan</div>
+<div class="tech-meta">081377776666</div>
+</div>
+</div>
+</td>
+<td><span class="spec-badge">AC &amp; Pendingin</span></td>
+<td><span class="area-badge">Bekasi</span></td>
+<td>1 sertifikat</td>
+<td><span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4.3</td>
+<td><span class="badge bg-secondary"><span class="dot dot-grey"></span>Offline</span></td>
+<td>
+<button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#profileDedi"><i class="bi bi-eye"></i></button>
+<button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+<button onclick="deleteRow(this)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ================= MODAL: TAMBAH TEKNISI ================= -->
+<div class="modal fade" id="modalTeknisi" tabindex="-1">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title"><i class="bi bi-person-badge text-primary"></i> Tambah Teknisi</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+<div class="modal-body">
+<form>
+
+<div class="row g-3">
+
+<div class="col-md-6">
+<label class="form-label">Nama Lengkap</label>
+<input type="text" class="form-control" placeholder="Nama teknisi">
+</div>
+
+<div class="col-md-6">
+<label class="form-label">No. HP / WhatsApp</label>
+<input type="text" class="form-control" placeholder="08xxxxxxxxxx">
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Email</label>
+<input type="email" class="form-control" placeholder="email@domain.com">
+</div>
+
+<div class="col-md-6">
+<label class="form-label">Status Kerja</label>
+<select class="form-select">
+<option>Freelance</option>
+<option>Karyawan Tetap</option>
+<option>Kontrak</option>
+</select>
+</div>
+
+<div class="col-12"><hr></div>
+
+<div class="col-md-6">
+<label class="form-label fw-semibold"><i class="bi bi-tools"></i> Spesialisasi</label>
+<div class="text-muted mb-1" style="font-size:12px;">Pilih semua keahlian yang dikuasai</div>
+<div class="check-grid">
+<div class="form-check"><input class="form-check-input" type="checkbox" id="s1"><label class="form-check-label" for="s1">AC &amp; Pendingin</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="s2"><label class="form-check-label" for="s2">Kelistrikan</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="s3"><label class="form-check-label" for="s3">Plumbing / Pipa</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="s4"><label class="form-check-label" for="s4">Jaringan / Networking</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="s5"><label class="form-check-label" for="s5">CCTV</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="s6"><label class="form-check-label" for="s6">Genset</label></div>
+</div>
+</div>
+
+<div class="col-md-6">
+<label class="form-label fw-semibold"><i class="bi bi-geo-alt"></i> Wilayah Kerja</label>
+<div class="text-muted mb-1" style="font-size:12px;">Area yang bisa dijangkau teknisi</div>
+<div class="check-grid">
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w1"><label class="form-check-label" for="w1">Depok</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w2"><label class="form-check-label" for="w2">Jakarta Selatan</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w3"><label class="form-check-label" for="w3">Jakarta Pusat</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w4"><label class="form-check-label" for="w4">Jakarta Barat</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w5"><label class="form-check-label" for="w5">Bogor</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w6"><label class="form-check-label" for="w6">Tangerang</label></div>
+<div class="form-check"><input class="form-check-input" type="checkbox" id="w7"><label class="form-check-label" for="w7">Bekasi</label></div>
+</div>
+</div>
+
+<div class="col-12"><hr></div>
+
+<div class="col-12">
+<label class="form-label fw-semibold"><i class="bi bi-patch-check"></i> Sertifikasi / Lisensi</label>
+<div class="text-muted mb-2" style="font-size:12px;">Tambahkan sertifikat yang dimiliki sebagai bukti kompetensi</div>
+
+<div id="certList">
+<div class="row g-2 mb-2">
+<div class="col-5"><input type="text" class="form-control form-control-sm" placeholder="Nama sertifikat (mis. K3 Listrik Kemnaker)"></div>
+<div class="col-3"><input type="text" class="form-control form-control-sm" placeholder="Penerbit"></div>
+<div class="col-2"><input type="text" class="form-control form-control-sm" placeholder="Tahun"></div>
+<div class="col-2"><button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.closest('.row').remove()"><i class="bi bi-trash"></i></button></div>
+</div>
+</div>
+
+<button type="button" class="btn btn-sm btn-outline-primary" onclick="addCertRow()">
+<i class="bi bi-plus-lg"></i> Tambah Sertifikat
+</button>
+</div>
+
+</div>
+
+</form>
+</div>
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+<button class="btn btn-primary" data-bs-dismiss="modal" onclick="toast('Teknisi baru berhasil ditambahkan')">
+<i class="bi bi-save"></i> Simpan Teknisi
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= MODAL: PROFIL KOMPETENSI TEKNISI ================= -->
+
+<div class="modal fade" id="profileAndi" tabindex="-1">
+<div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Profil Kompetensi Teknisi</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body">
+<div class="d-flex align-items-center gap-3 mb-3">
+<img src="https://ui-avatars.com/api/?name=Andi+Wijaya&background=0d6efd&color=fff&size=128" class="tech-profile-avatar">
+<div>
+<h5 class="mb-1">Andi Wijaya</h5>
+<div class="text-muted">081212121212 &middot; andi@email.com</div>
+<span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.8 &middot; 34 order selesai &middot; <span class="badge bg-success">Freelance Aktif</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-6">
+<h6><i class="bi bi-tools text-primary"></i> Spesialisasi</h6>
+<span class="spec-badge">AC &amp; Pendingin</span><span class="spec-badge">Kelistrikan</span>
+<h6 class="mt-3"><i class="bi bi-geo-alt text-primary"></i> Wilayah Kerja</h6>
+<span class="area-badge">Depok</span><span class="area-badge">Jakarta Selatan</span>
+</div>
+<div class="col-md-6">
+<h6><i class="bi bi-patch-check text-primary"></i> Sertifikasi</h6>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>K3 Listrik</b><div class="text-muted" style="font-size:12px;">Kemnaker RI &middot; 2023</div></div></div>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>Sertifikat Teknisi AC</b><div class="text-muted" style="font-size:12px;">APIT (Asosiasi Perusahaan Instalasi Tata Udara) &middot; 2022</div></div></div>
+</div>
+</div>
+</div>
+<div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div>
+</div></div>
+</div>
+
+<div class="modal fade" id="profileBudi" tabindex="-1">
+<div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Profil Kompetensi Teknisi</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body">
+<div class="d-flex align-items-center gap-3 mb-3">
+<img src="https://ui-avatars.com/api/?name=Budi+Santoso&background=198754&color=fff&size=128" class="tech-profile-avatar">
+<div>
+<h5 class="mb-1">Budi Santoso</h5>
+<div class="text-muted">081300000000 &middot; budi@email.com</div>
+<span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.6 &middot; 29 order selesai &middot; <span class="badge bg-success">Freelance Aktif</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-6">
+<h6><i class="bi bi-tools text-primary"></i> Spesialisasi</h6>
+<span class="spec-badge">Jaringan / Networking</span><span class="spec-badge">CCTV</span>
+<h6 class="mt-3"><i class="bi bi-geo-alt text-primary"></i> Wilayah Kerja</h6>
+<span class="area-badge">Jakarta Pusat</span><span class="area-badge">Jakarta Barat</span>
+</div>
+<div class="col-md-6">
+<h6><i class="bi bi-patch-check text-primary"></i> Sertifikasi</h6>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>Cisco CCNA</b><div class="text-muted" style="font-size:12px;">Cisco Systems &middot; 2021</div></div></div>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>Teknisi Jaringan Komputer</b><div class="text-muted" style="font-size:12px;">BNSP &middot; 2023</div></div></div>
+</div>
+</div>
+</div>
+<div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div>
+</div></div>
+</div>
+
+<div class="modal fade" id="profileJoko" tabindex="-1">
+<div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Profil Kompetensi Teknisi</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body">
+<div class="d-flex align-items-center gap-3 mb-3">
+<img src="https://ui-avatars.com/api/?name=Joko+Prasetyo&background=fd7e14&color=fff&size=128" class="tech-profile-avatar">
+<div>
+<h5 class="mb-1">Joko Prasetyo</h5>
+<div class="text-muted">081399998888 &middot; joko@email.com</div>
+<span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4.5 &middot; 25 order selesai &middot; <span class="badge bg-success">Freelance Aktif</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-6">
+<h6><i class="bi bi-tools text-primary"></i> Spesialisasi</h6>
+<span class="spec-badge">Plumbing / Pipa</span><span class="spec-badge">Genset</span>
+<h6 class="mt-3"><i class="bi bi-geo-alt text-primary"></i> Wilayah Kerja</h6>
+<span class="area-badge">Depok</span><span class="area-badge">Bogor</span>
+</div>
+<div class="col-md-6">
+<h6><i class="bi bi-patch-check text-primary"></i> Sertifikasi</h6>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>Teknisi Genset</b><div class="text-muted" style="font-size:12px;">BNSP &middot; 2022</div></div></div>
+</div>
+</div>
+</div>
+<div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div>
+</div></div>
+</div>
+
+<div class="modal fade" id="profileRian" tabindex="-1">
+<div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Profil Kompetensi Teknisi</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body">
+<div class="d-flex align-items-center gap-3 mb-3">
+<img src="https://ui-avatars.com/api/?name=Rian+Saputra&background=6f42c1&color=fff&size=128" class="tech-profile-avatar">
+<div>
+<h5 class="mb-1">Rian Saputra</h5>
+<div class="text-muted">081355556666 &middot; rian@email.com</div>
+<span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 4.7 &middot; 21 order selesai &middot; <span class="badge bg-success">Freelance Aktif</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-6">
+<h6><i class="bi bi-tools text-primary"></i> Spesialisasi</h6>
+<span class="spec-badge">Kelistrikan</span><span class="spec-badge">Genset</span>
+<h6 class="mt-3"><i class="bi bi-geo-alt text-primary"></i> Wilayah Kerja</h6>
+<span class="area-badge">Tangerang</span><span class="area-badge">Jakarta Barat</span>
+</div>
+<div class="col-md-6">
+<h6><i class="bi bi-patch-check text-primary"></i> Sertifikasi</h6>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>K3 Listrik</b><div class="text-muted" style="font-size:12px;">Kemnaker RI &middot; 2023</div></div></div>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>Ahli Listrik Industri</b><div class="text-muted" style="font-size:12px;">BNSP &middot; 2021</div></div></div>
+</div>
+</div>
+</div>
+<div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div>
+</div></div>
+</div>
+
+<div class="modal fade" id="profileDedi" tabindex="-1">
+<div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Profil Kompetensi Teknisi</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body">
+<div class="d-flex align-items-center gap-3 mb-3">
+<img src="https://ui-avatars.com/api/?name=Dedi+Kurniawan&background=6c757d&color=fff&size=128" class="tech-profile-avatar">
+<div>
+<h5 class="mb-1">Dedi Kurniawan</h5>
+<div class="text-muted">081377776666 &middot; dedi@email.com</div>
+<span class="rating-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4.3 &middot; 15 order selesai &middot; <span class="badge bg-secondary">Non Aktif</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-md-6">
+<h6><i class="bi bi-tools text-primary"></i> Spesialisasi</h6>
+<span class="spec-badge">AC &amp; Pendingin</span>
+<h6 class="mt-3"><i class="bi bi-geo-alt text-primary"></i> Wilayah Kerja</h6>
+<span class="area-badge">Bekasi</span>
+</div>
+<div class="col-md-6">
+<h6><i class="bi bi-patch-check text-primary"></i> Sertifikasi</h6>
+<div class="cert-item"><i class="bi bi-award-fill"></i><div><b>Sertifikat Teknisi AC</b><div class="text-muted" style="font-size:12px;">APIT &middot; 2020</div></div></div>
+</div>
+</div>
+</div>
+<div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button></div>
+</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+<script>
+
+renderSidebar("technician");
+
+function filterSpec(){
+    const val = document.getElementById("specFilter").value;
+    document.querySelectorAll("#techTable tbody tr").forEach(row=>{
+        const specs = row.getAttribute("data-spec") || "";
+        row.style.display = (val === "" || specs.includes(val)) ? "" : "none";
+    });
+}
+
+function filterArea(){
+    const val = document.getElementById("areaFilter").value;
+    document.querySelectorAll("#techTable tbody tr").forEach(row=>{
+        const areas = row.getAttribute("data-area") || "";
+        row.style.display = (val === "" || areas.includes(val)) ? "" : "none";
+    });
+}
+
+function addCertRow(){
+    const wrap = document.getElementById("certList");
+    const div = document.createElement("div");
+    div.className = "row g-2 mb-2";
+    div.innerHTML = `
+        <div class="col-5"><input type="text" class="form-control form-control-sm" placeholder="Nama sertifikat"></div>
+        <div class="col-3"><input type="text" class="form-control form-control-sm" placeholder="Penerbit"></div>
+        <div class="col-2"><input type="text" class="form-control form-control-sm" placeholder="Tahun"></div>
+        <div class="col-2"><button type="button" class="btn btn-sm btn-outline-danger w-100" onclick="this.closest('.row').remove()"><i class="bi bi-trash"></i></button></div>
+    `;
+    wrap.appendChild(div);
+}
+
+</script>
+
+</body>
+</html>

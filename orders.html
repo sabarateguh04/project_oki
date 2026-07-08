@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Order - Maintenance System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="content">
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+<div class="container-fluid">
+<h4 class="mb-0">Data Order</h4>
+<div class="d-flex align-items-center">
+<span id="roleBadge" class="me-3"></span>
+<i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
+<b id="username"></b>
+</div>
+</div>
+</nav>
+
+<div class="container-fluid mt-4">
+
+<div class="card shadow-sm">
+<div class="card-body">
+
+<div class="row mb-3 g-2">
+<div class="col-md-4">
+<input class="form-control" id="search" placeholder="Cari nomor order / customer..." onkeyup="searchTable('search','myTable')">
+</div>
+<div class="col-md-3">
+<select class="form-select" id="statusFilter" onchange="filterStatus('statusFilter','myTable',3)">
+<option value="">Semua Status</option>
+<option value="Menunggu Atasan">Menunggu Atasan</option>
+<option value="Menunggu Finance">Menunggu Finance</option>
+<option value="Ditugaskan">Ditugaskan</option>
+<option value="Dikerjakan">Dikerjakan</option>
+<option value="Tunggu Bayar">Selesai, Tunggu Bayar</option>
+<option value="Closed">Closed</option>
+<option value="Ditolak">Ditolak</option>
+</select>
+</div>
+<div class="col-md-5 text-md-end" id="addOrderBtnWrap"></div>
+</div>
+
+<div class="table-responsive">
+<table class="table table-hover align-middle" id="myTable">
+<thead class="table-light">
+<tr>
+<th>No Order</th>
+<th>Customer</th>
+<th>Teknisi</th>
+<th>Status</th>
+<th>Tanggal</th>
+<th width="140">Aksi</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>ORD-00001</td>
+<td>PT ABC Indonesia</td>
+<td>Andi Wijaya</td>
+<td><span class="badge bg-success">Closed</span></td>
+<td>02-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00002</td>
+<td>PT XYZ</td>
+<td>Budi Santoso</td>
+<td><span class="badge badge-teal">Selesai, Tunggu Bayar</span></td>
+<td>05-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00003</td>
+<td>PT DEF</td>
+<td>Joko Prasetyo</td>
+<td><span class="badge badge-navy">Dikerjakan</span></td>
+<td>06-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00004</td>
+<td>PT Mega Persada</td>
+<td>-</td>
+<td><span class="badge badge-purple">Menunggu Finance</span></td>
+<td>07-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00005</td>
+<td>PT Sinar Jaya</td>
+<td>-</td>
+<td><span class="badge bg-warning text-dark">Menunggu Atasan</span></td>
+<td>08-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00006</td>
+<td>PT Cahaya Abadi</td>
+<td>Rian Saputra</td>
+<td><span class="badge bg-primary">Ditugaskan</span></td>
+<td>08-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00007</td>
+<td>PT Graha Mitra</td>
+<td>-</td>
+<td><span class="badge bg-warning text-dark">Menunggu Atasan</span></td>
+<td>08-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+<tr>
+<td>ORD-00008</td>
+<td>PT Duta Sejahtera</td>
+<td>Andi Wijaya</td>
+<td><span class="badge bg-danger">Ditolak</span></td>
+<td>07-07-2026</td>
+<td><a href="order-detail.html" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i></a></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<nav>
+<ul class="pagination justify-content-end mt-3">
+<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+<li class="page-item active"><a class="page-link" href="#">1</a></li>
+<li class="page-item"><a class="page-link" href="#">2</a></li>
+<li class="page-item"><a class="page-link" href="#">Next</a></li>
+</ul>
+</nav>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+
+renderSidebar("orders");
+
+if (currentRole() === "admin") {
+    document.getElementById("addOrderBtnWrap").innerHTML =
+        '<a href="form-order.html" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Tambah Order</a>';
+}
+
+</script>
+
+</body>
+</html>

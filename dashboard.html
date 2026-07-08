@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard - ELJA Maintenance System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar"></div>
+
+<div class="content">
+
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+<div class="container-fluid">
+<div>
+<h4 class="mb-0">Dashboard</h4>
+<small class="text-muted">Ringkasan hari ini, 08 Juli 2026</small>
+</div>
+<div class="d-flex align-items-center gap-3">
+<span id="roleBadge"></span>
+<div class="d-flex align-items-center">
+<i class="bi bi-person-circle fs-4 me-2 text-primary"></i>
+<span id="username" class="fw-semibold"></span>
+</div>
+</div>
+</div>
+</nav>
+
+<div class="container-fluid mt-4">
+
+<!-- =========================================================
+     ADMIN DASHBOARD
+========================================================== -->
+<div class="role-block" data-role="admin">
+
+<div class="section-title"><div class="num">1</div><div><h5>Ringkasan KPI</h5><span class="sub">Rekap performa order secara keseluruhan</span></div></div>
+
+<div class="row g-3">
+<div class="col-6 col-md-4 col-xl"><div class="kpi-card" style="background:linear-gradient(135deg,#0d6efd,#0b5ed7);"><i class="bi bi-clipboard-data kpi-icon"></i><h2>152</h2><div class="kpi-label">Total Order</div><div class="kpi-sub">Bulan ini</div></div></div>
+<div class="col-6 col-md-4 col-xl"><div class="kpi-card" style="background:linear-gradient(135deg,#dc3545,#b02a37);"><i class="bi bi-hourglass-split kpi-icon"></i><h2>19</h2><div class="kpi-label">Pending</div><div class="kpi-sub">Belum ditindaklanjuti</div></div></div>
+<div class="col-6 col-md-4 col-xl"><div class="kpi-card" style="background:linear-gradient(135deg,#fd7e14,#dc6803);"><i class="bi bi-arrow-repeat kpi-icon"></i><h2>25</h2><div class="kpi-label">Progress</div><div class="kpi-sub">Sedang dikerjakan teknisi</div></div></div>
+<div class="col-6 col-md-4 col-xl"><div class="kpi-card" style="background:linear-gradient(135deg,#198754,#146c43);"><i class="bi bi-check2-circle kpi-icon"></i><h2>108</h2><div class="kpi-label">Selesai</div><div class="kpi-sub">71% dari total order</div></div></div>
+<div class="col-6 col-md-4 col-xl"><div class="kpi-card" style="background:linear-gradient(135deg,#6f42c1,#59339d);"><i class="bi bi-check2-square kpi-icon"></i><h2>8</h2><div class="kpi-label">Menunggu Approval</div><div class="kpi-sub">3 Atasan &middot; 5 Finance</div></div></div>
+</div>
+
+<div class="section-title"><div class="num">2</div><div><h5>Monitoring Operasional</h5><span class="sub">Order terbaru, aktivitas &amp; posisi teknisi (disinkron dari aplikasi mobile)</span></div></div>
+
+<div class="row g-3">
+
+<div class="col-lg-7">
+<div class="card shadow-sm h-100">
+<div class="card-header d-flex justify-content-between align-items-center">
+<h6 class="mb-0"><i class="bi bi-list-task text-primary me-1"></i> Order Terbaru</h6>
+<a href="orders.html" class="small text-decoration-none">Lihat semua <i class="bi bi-arrow-right"></i></a>
+</div>
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead class="table-light"><tr><th>No Order</th><th>Customer</th><th>Status</th><th>Aksi</th></tr></thead>
+<tbody>
+<tr><td>ORD-00005</td><td>PT Sinar Jaya</td><td><span class="badge bg-warning text-dark">Menunggu Atasan</span></td><td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td></tr>
+<tr><td>ORD-00004</td><td>PT Mega Persada</td><td><span class="badge badge-purple">Menunggu Finance</span></td><td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td></tr>
+<tr><td>ORD-00003</td><td>PT DEF</td><td><span class="badge badge-navy">Dikerjakan</span></td><td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td></tr>
+<tr><td>ORD-00002</td><td>PT XYZ</td><td><span class="badge badge-teal">Selesai, Tunggu Bayar</span></td><td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td></tr>
+<tr><td>ORD-00001</td><td>PT ABC Indonesia</td><td><span class="badge bg-success">Closed</span></td><td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-lg-5">
+<div class="card shadow-sm h-100">
+<div class="card-header"><h6 class="mb-0"><i class="bi bi-activity text-primary me-1"></i> Aktivitas Terbaru</h6></div>
+<div class="card-body" style="max-height:322px; overflow-y:auto;">
+<div class="timeline">
+<div class="timeline-item"><div class="timeline-title">Finance transfer jasa untuk ORD-00001</div><div class="timeline-date">2 menit lalu</div></div>
+<div class="timeline-item"><div class="timeline-title">Atasan approve ORD-00004, diteruskan ke Finance</div><div class="timeline-date">20 menit lalu</div></div>
+<div class="timeline-item"><div class="timeline-title">Order baru ORD-00005 dibuat untuk PT Sinar Jaya</div><div class="timeline-date">40 menit lalu</div></div>
+<div class="timeline-item"><div class="timeline-title">Teknisi Budi Santoso mulai pengerjaan ORD-00003</div><div class="timeline-date">1 jam lalu</div></div>
+<div class="timeline-item"><div class="timeline-title">Finance clear dana pre-bayar material ORD-00003</div><div class="timeline-date">3 jam lalu</div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="col-lg-5">
+<div class="card shadow-sm h-100">
+<div class="card-header d-flex justify-content-between align-items-center">
+<h6 class="mb-0"><i class="bi bi-broadcast text-primary me-1"></i> Teknisi Online</h6>
+<span class="small text-muted"><span class="dot dot-green"></span>Live dari mobile app</span>
+</div>
+<div class="card-body" id="techList"></div>
+</div>
+</div>
+
+<div class="col-lg-7">
+<div class="card shadow-sm h-100">
+<div class="card-header d-flex justify-content-between align-items-center">
+<h6 class="mb-0"><i class="bi bi-geo-alt text-primary me-1"></i> Lokasi Teknisi</h6>
+<span class="small text-muted">Update: <b id="lastGpsUpdate">baru saja</b></span>
+</div>
+<div class="card-body">
+<div id="teknisiMap"></div>
+<div class="map-legend">
+<span><span class="dot dot-green"></span> Ready (mengirim GPS)</span>
+<span><span class="dot dot-orange"></span> Dalam perjalanan</span>
+<span><span class="dot dot-grey"></span> Offline</span>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="section-title"><div class="num">3</div><div><h5>Analitik</h5><span class="sub">Tren order, performa teknisi, SLA &amp; waktu penyelesaian</span></div></div>
+
+<div class="row g-3 mb-4">
+<div class="col-lg-7"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-bar-chart text-primary me-1"></i> Order per Bulan</h6></div><div class="card-body"><canvas id="chartOrderBulan"></canvas></div></div></div>
+<div class="col-lg-5"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-person-lines-fill text-primary me-1"></i> Performa Teknisi</h6></div><div class="card-body"><canvas id="chartTeknisi"></canvas></div></div></div>
+<div class="col-lg-5"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-pie-chart text-primary me-1"></i> Pencapaian SLA</h6></div><div class="card-body"><canvas id="chartSLA"></canvas><div class="row text-center mt-2"><div class="col mini-stat"><h4 class="text-success">87%</h4><span>Tepat waktu</span></div><div class="col mini-stat"><h4 class="text-danger">13%</h4><span>Melewati SLA</span></div></div></div></div></div>
+<div class="col-lg-7"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-clock-history text-primary me-1"></i> Rata-rata Waktu Penyelesaian (jam)</h6></div><div class="card-body"><canvas id="chartWaktu"></canvas></div></div></div>
+</div>
+
+</div>
+
+<!-- =========================================================
+     ATASAN DASHBOARD
+========================================================== -->
+<div class="role-block" data-role="atasan">
+
+<div class="section-title"><div class="num">1</div><div><h5>Ringkasan Approval</h5><span class="sub">Status persetujuan tiket yang jadi tanggung jawab kamu</span></div></div>
+
+<div class="row g-3">
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#fd7e14,#dc6803);"><i class="bi bi-hourglass-split kpi-icon"></i><h2>3</h2><div class="kpi-label">Menunggu Approval Saya</div></div></div>
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#198754,#146c43);"><i class="bi bi-check2-circle kpi-icon"></i><h2>42</h2><div class="kpi-label">Disetujui Bulan Ini</div></div></div>
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#dc3545,#b02a37);"><i class="bi bi-x-circle kpi-icon"></i><h2>4</h2><div class="kpi-label">Ditolak Bulan Ini</div></div></div>
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#6f42c1,#59339d);"><i class="bi bi-stopwatch kpi-icon"></i><h2>1.8j</h2><div class="kpi-label">Rata-rata Waktu Approve</div></div></div>
+</div>
+
+<div class="section-title"><div class="num">2</div><div><h5>Tiket Menunggu Persetujuan</h5><span class="sub">Approve langsung dari sini atau buka detail tiket</span></div></div>
+
+<div class="card shadow-sm">
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead class="table-light"><tr><th>No Order</th><th>Customer</th><th>Estimasi Biaya</th><th>Diajukan</th><th width="230">Aksi</th></tr></thead>
+<tbody>
+<tr><td>ORD-00005</td><td>PT Sinar Jaya</td><td>Rp850.000</td><td>40 menit lalu</td>
+<td>
+<a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+<button class="btn btn-sm btn-success" onclick="approveAtasan(this)"><i class="bi bi-check-lg"></i> Approve</button>
+<button class="btn btn-sm btn-danger" onclick="rejectAtasan(this)"><i class="bi bi-x-lg"></i> Reject</button>
+</td></tr>
+<tr><td>ORD-00006</td><td>PT Cahaya Abadi</td><td>Rp1.200.000</td><td>2 jam lalu</td>
+<td>
+<a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+<button class="btn btn-sm btn-success" onclick="approveAtasan(this)"><i class="bi bi-check-lg"></i> Approve</button>
+<button class="btn btn-sm btn-danger" onclick="rejectAtasan(this)"><i class="bi bi-x-lg"></i> Reject</button>
+</td></tr>
+<tr><td>ORD-00007</td><td>PT Graha Mitra</td><td>Rp430.000</td><td>3 jam lalu</td>
+<td>
+<a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+<button class="btn btn-sm btn-success" onclick="approveAtasan(this)"><i class="bi bi-check-lg"></i> Approve</button>
+<button class="btn btn-sm btn-danger" onclick="rejectAtasan(this)"><i class="bi bi-x-lg"></i> Reject</button>
+</td></tr>
+</tbody>
+</table>
+</div>
+<div class="text-end p-3">
+<a href="approval-atasan.html" class="small text-decoration-none">Buka halaman Approval Tiket lengkap <i class="bi bi-arrow-right"></i></a>
+</div>
+</div>
+</div>
+
+<div class="section-title"><div class="num">3</div><div><h5>Analitik</h5><span class="sub">Performa teknisi &amp; pencapaian SLA</span></div></div>
+
+<div class="row g-3 mb-4">
+<div class="col-lg-6"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-person-lines-fill text-primary me-1"></i> Performa Teknisi</h6></div><div class="card-body"><canvas id="chartTeknisiAtasan"></canvas></div></div></div>
+<div class="col-lg-6"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-pie-chart text-primary me-1"></i> Pencapaian SLA</h6></div><div class="card-body"><canvas id="chartSLAAtasan"></canvas></div></div></div>
+</div>
+
+</div>
+
+<!-- =========================================================
+     FINANCE DASHBOARD
+========================================================== -->
+<div class="role-block" data-role="finance">
+
+<div class="section-title"><div class="num">1</div><div><h5>Ringkasan Keuangan</h5><span class="sub">Antrean transfer dan realisasi dana</span></div></div>
+
+<div class="row g-3">
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#fd7e14,#dc6803);"><i class="bi bi-box-seam kpi-icon"></i><h2>2</h2><div class="kpi-label">Menunggu TF Pre-bayar</div></div></div>
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#0d6efd,#0b5ed7);"><i class="bi bi-cash-coin kpi-icon"></i><h2>5</h2><div class="kpi-label">Menunggu TF Jasa Teknisi</div></div></div>
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#198754,#146c43);"><i class="bi bi-graph-up-arrow kpi-icon"></i><h2>Rp42,5jt</h2><div class="kpi-label">Tersalurkan Bulan Ini</div></div></div>
+<div class="col-6 col-md-3"><div class="kpi-card" style="background:linear-gradient(135deg,#6f42c1,#59339d);"><i class="bi bi-stopwatch kpi-icon"></i><h2>3.2j</h2><div class="kpi-label">Rata-rata Waktu Proses TF</div></div></div>
+</div>
+
+<div class="section-title"><div class="num">2</div><div><h5>Tiket Menunggu Transfer</h5><span class="sub">Pre-bayar kebutuhan material &amp; pembayaran jasa teknisi</span></div></div>
+
+<div class="card shadow-sm">
+<div class="card-body p-0">
+<div class="table-responsive">
+<table class="table table-hover mb-0">
+<thead class="table-light"><tr><th>No Order</th><th>Keperluan</th><th>Nominal</th><th>Jenis</th><th width="200">Aksi</th></tr></thead>
+<tbody>
+<tr><td>ORD-00004</td><td>Beli modem (pre-bayar)</td><td>Rp350.000</td><td><span class="badge bg-warning text-dark">Sebelum assign</span></td>
+<td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+<button class="btn btn-sm btn-success" onclick="financeClearPrepay(this)"><i class="bi bi-send-check"></i> TF</button></td></tr>
+<tr><td>ORD-00002</td><td>Jasa &amp; ongkos Budi Santoso</td><td>Rp600.000</td><td><span class="badge badge-teal">Sesudah selesai</span></td>
+<td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+<button class="btn btn-sm btn-success" onclick="financePayJasa(this)"><i class="bi bi-send-check"></i> TF</button></td></tr>
+<tr><td>ORD-00001</td><td>Jasa &amp; ongkos Andi Wijaya</td><td>Rp750.000</td><td><span class="badge badge-teal">Sesudah selesai</span></td>
+<td><a href="order-detail.html" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+<button class="btn btn-sm btn-success" onclick="financePayJasa(this)"><i class="bi bi-send-check"></i> TF</button></td></tr>
+</tbody>
+</table>
+</div>
+<div class="text-end p-3">
+<a href="approval-finance.html" class="small text-decoration-none">Buka halaman Approval Finance lengkap <i class="bi bi-arrow-right"></i></a>
+</div>
+</div>
+</div>
+
+<div class="section-title"><div class="num">3</div><div><h5>Analitik</h5><span class="sub">Pengeluaran bulanan &amp; ketepatan waktu pembayaran</span></div></div>
+
+<div class="row g-3 mb-4">
+<div class="col-lg-7"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-bar-chart text-primary me-1"></i> Pengeluaran per Bulan</h6></div><div class="card-body"><canvas id="chartPengeluaran"></canvas></div></div></div>
+<div class="col-lg-5"><div class="card shadow-sm chart-card h-100"><div class="card-header"><h6 class="mb-0"><i class="bi bi-pie-chart text-primary me-1"></i> Ketepatan Waktu TF</h6></div><div class="card-body"><canvas id="chartSLAFinance"></canvas></div></div></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+
+renderSidebar("dashboard");
+
+const role = currentRole();
+
+document.querySelectorAll(".role-block").forEach(el => {
+    el.style.display = (el.dataset.role === role) ? "" : "none";
+});
+
+Chart.defaults.font.family = "Segoe UI";
+
+/* ============================================
+   ADMIN WIDGETS
+============================================ */
+
+if (role === "admin") {
+
+    const teknisiData = [
+        { nama:"Andi Wijaya",     status:"ready",   order:"ORD-00003", lat:-6.3928, lng:106.8219 },
+        { nama:"Budi Santoso",    status:"ready",   order:"ORD-00004", lat:-6.3654, lng:106.8306 },
+        { nama:"Joko Prasetyo",   status:"jalan",   order:"ORD-00003", lat:-6.4025, lng:106.7942 },
+        { nama:"Rian Saputra",    status:"ready",   order:"ORD-00006", lat:-6.3781, lng:106.8459 },
+        { nama:"Dedi Kurniawan",  status:"offline", order:"-",         lat:-6.3502, lng:106.8035 }
+    ];
+
+    const statusInfo = {
+        ready:   { label:"Ready",     dot:"dot-green",  badge:"success" },
+        jalan:   { label:"Menuju lokasi", dot:"dot-orange", badge:"warning" },
+        offline: { label:"Offline",   dot:"dot-grey",    badge:"secondary" }
+    };
+
+    function renderTechList(){
+        const el = document.getElementById("techList");
+        el.innerHTML = "";
+        teknisiData.forEach((t,i)=>{
+            const s = statusInfo[t.status];
+            const secAgo = t.status==="offline" ? "-" : (window._gpsTick||0) + " detik lalu";
+            el.innerHTML += `
+            <div class="tech-item">
+                <div class="d-flex align-items-center">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t.nama)}&background=0d6efd&color=fff" class="tech-avatar">
+                    <div>
+                        <div class="tech-name">${t.nama}</div>
+                        <div class="tech-meta"><span class="dot ${s.dot}"></span>${s.label} &middot; ${t.order}</div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-${s.badge}">${s.label}</span>
+                    <div class="tech-meta" data-tick="${i}">${secAgo}</div>
+                </div>
+            </div>`;
+        });
+    }
+
+    const map = L.map('teknisiMap').setView([-6.3800, 106.8200], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap', maxZoom: 18 }).addTo(map);
+
+    function colorFor(status){ return status==="ready" ? "#20c997" : status==="jalan" ? "#fd7e14" : "#adb5bd"; }
+
+    let markers = [];
+    function renderMarkers(){
+        markers.forEach(m=>map.removeLayer(m));
+        markers = [];
+        teknisiData.forEach(t=>{
+            const icon = L.divIcon({ className:"", html:`<div style="width:16px;height:16px;border-radius:50%;background:${colorFor(t.status)};border:3px solid #fff;box-shadow:0 0 4px rgba(0,0,0,.4)"></div>`, iconSize:[16,16] });
+            const m = L.marker([t.lat,t.lng], {icon}).addTo(map).bindPopup(`<b>${t.nama}</b><br>${statusInfo[t.status].label}<br>Order: ${t.order}`);
+            markers.push(m);
+        });
+    }
+
+    renderMarkers();
+    renderTechList();
+
+    window._gpsTick = 0;
+    setInterval(()=>{
+        window._gpsTick++;
+        document.querySelectorAll("[data-tick]").forEach(el=>{
+            const idx = el.getAttribute("data-tick");
+            if(teknisiData[idx].status!=="offline") el.innerText = window._gpsTick + " detik lalu";
+        });
+    }, 1000);
+
+    setInterval(()=>{
+        teknisiData.forEach(t=>{ if(t.status!=="offline"){ t.lat += (Math.random()-0.5)*0.004; t.lng += (Math.random()-0.5)*0.004; } });
+        renderMarkers();
+        window._gpsTick = 0;
+        document.getElementById("lastGpsUpdate").innerText = "baru saja";
+    }, 30000);
+
+    new Chart(document.getElementById("chartOrderBulan"), { type:"bar", data:{ labels:["Jan","Feb","Mar","Apr","Mei","Jun","Jul"], datasets:[{ label:"Jumlah Order", data:[18,22,19,26,24,30,13], backgroundColor:"#0d6efd", borderRadius:6, maxBarThickness:34 }] }, options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true, grid:{color:"#f0f1f4"}}, x:{grid:{display:false}} } } });
+
+    new Chart(document.getElementById("chartTeknisi"), { type:"bar", data:{ labels:["Andi Wijaya","Budi Santoso","Joko Prasetyo","Rian Saputra","Dedi Kurniawan"], datasets:[{ label:"Order Selesai", data:[34,29,25,21,15], backgroundColor:["#0d6efd","#198754","#fd7e14","#6f42c1","#20c997"], borderRadius:6 }] }, options:{ indexAxis:"y", responsive:true, plugins:{legend:{display:false}}, scales:{ x:{beginAtZero:true, grid:{color:"#f0f1f4"}}, y:{grid:{display:false}} } } });
+
+    new Chart(document.getElementById("chartSLA"), { type:"doughnut", data:{ labels:["Tepat Waktu","Melewati SLA"], datasets:[{ data:[87,13], backgroundColor:["#198754","#dc3545"], borderWidth:0 }] }, options:{ responsive:true, cutout:"70%", plugins:{legend:{position:"bottom"}} } });
+
+    new Chart(document.getElementById("chartWaktu"), { type:"line", data:{ labels:["Jan","Feb","Mar","Apr","Mei","Jun","Jul"], datasets:[{ label:"Rata-rata Jam Penyelesaian", data:[6.2,5.8,6.5,5.4,4.9,4.6,4.2], borderColor:"#0d6efd", backgroundColor:"rgba(13,110,253,.12)", fill:true, tension:.35, pointBackgroundColor:"#0d6efd" }] }, options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true, grid:{color:"#f0f1f4"}}, x:{grid:{display:false}} } } });
+
+}
+
+/* ============================================
+   ATASAN WIDGETS
+============================================ */
+
+if (role === "atasan") {
+
+    new Chart(document.getElementById("chartTeknisiAtasan"), { type:"bar", data:{ labels:["Andi Wijaya","Budi Santoso","Joko Prasetyo","Rian Saputra","Dedi Kurniawan"], datasets:[{ label:"Order Selesai", data:[34,29,25,21,15], backgroundColor:["#0d6efd","#198754","#fd7e14","#6f42c1","#20c997"], borderRadius:6 }] }, options:{ indexAxis:"y", responsive:true, plugins:{legend:{display:false}}, scales:{ x:{beginAtZero:true, grid:{color:"#f0f1f4"}}, y:{grid:{display:false}} } } });
+
+    new Chart(document.getElementById("chartSLAAtasan"), { type:"doughnut", data:{ labels:["Tepat Waktu","Melewati SLA"], datasets:[{ data:[87,13], backgroundColor:["#198754","#dc3545"], borderWidth:0 }] }, options:{ responsive:true, cutout:"70%", plugins:{legend:{position:"bottom"}} } });
+
+}
+
+/* ============================================
+   FINANCE WIDGETS
+============================================ */
+
+if (role === "finance") {
+
+    new Chart(document.getElementById("chartPengeluaran"), { type:"bar", data:{ labels:["Jan","Feb","Mar","Apr","Mei","Jun","Jul"], datasets:[
+        { label:"Jasa Teknisi", data:[9.2,10.1,8.7,11.4,10.8,12.3,7.1], backgroundColor:"#0d6efd", borderRadius:4 },
+        { label:"Material/Lainnya", data:[3.1,2.6,4.0,3.3,2.9,3.6,1.8], backgroundColor:"#fd7e14", borderRadius:4 }
+    ] }, options:{ responsive:true, plugins:{legend:{position:"bottom"}}, scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, beginAtZero:true, grid:{color:"#f0f1f4"}, title:{display:true,text:"Rp juta"}} } } });
+
+    new Chart(document.getElementById("chartSLAFinance"), { type:"doughnut", data:{ labels:["Tepat Waktu","Terlambat"], datasets:[{ data:[91,9], backgroundColor:["#198754","#dc3545"], borderWidth:0 }] }, options:{ responsive:true, cutout:"70%", plugins:{legend:{position:"bottom"}} } });
+
+}
+
+</script>
+
+</body>
+</html>
