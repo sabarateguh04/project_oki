@@ -50,7 +50,7 @@
 <div class="card shadow-sm mb-3">
 <div class="card-header d-flex justify-content-between align-items-center">
 <h6 class="mb-0"><i class="bi bi-info-circle text-primary"></i> Informasi Tiket</h6>
-<span class="badge badge-purple">Menunggu Finance</span>
+<span class="badge bg-warning text-dark" id="statusTicket">STATUS: Nunggu Finance</span>
 </div>
 <div class="card-body">
 <div class="row g-3">
@@ -60,7 +60,7 @@
 <div class="col-md-6"><div class="text-muted small">Prioritas</div><div class="fw-semibold">Tinggi</div></div>
 <div class="col-12"><div class="text-muted small">Deskripsi</div><div>Modem &amp; router kantor mati total, perlu penggantian unit dan pengecekan jaringan LAN lantai 2.</div></div>
 <div class="col-md-6"><div class="text-muted small">Dibuat oleh</div><div class="fw-semibold">Rina Kartika (Admin)</div></div>
-<div class="col-md-6"><div class="text-muted small">Teknisi Ditugaskan</div><div class="fw-semibold">Menunggu proses finance</div></div>
+<div class="col-md-6"><div class="text-muted small">Teknisi Ditugaskan</div><div class="fw-semibold" id="teknisiAssigned">-</div></div>
 </div>
 </div>
 </div>
@@ -73,38 +73,43 @@
 <div class="lifecycle-icon lc-done"><i class="bi bi-check-lg"></i></div>
 <div>
 <b>Tiket dibuat Admin</b>
-<div class="text-muted small">Rina Kartika &middot; 07-07-2026, 09.10 &middot; termasuk rincian biaya &amp; timing bayar</div>
+<div class="text-muted small">Rina Kartika &middot; 07-07-2026, 09.10</div>
+<div class="text-muted small"><i class="bi bi-check-circle text-success"></i> Tiket dibuat dengan rincian biaya &amp; timing bayar</div>
 </div>
 </div>
 
 <div class="lifecycle-step">
 <div class="lifecycle-icon lc-done"><i class="bi bi-check-lg"></i></div>
 <div>
-<b>Disetujui Atasan</b>
-<div class="text-muted small">Hendra Wibowo &middot; 07-07-2026, 10.45 &middot; "Sesuai kebutuhan, lanjutkan"</div>
+<b>✓ Disetujui Atasan (Approval)</b>
+<div class="text-muted small">Hendra Wibowo &middot; 07-07-2026, 10.45</div>
+<div class="text-muted small"><i class="bi bi-check-circle text-success"></i> Atasan sudah approve tiket ini</div>
 </div>
 </div>
 
 <div class="lifecycle-step">
 <div class="lifecycle-icon lc-current"><i class="bi bi-hourglass-split"></i></div>
 <div>
-<b>Finance: cek kebutuhan pre-bayar</b>
-<div class="text-muted small">Perlu beli modem baru sebelum tiket di-assign ke teknisi &mdash; menunggu proses Finance</div>
+<b>⏳ Finance: Proses Pre-Bayar (jika ada)</b>
+<div class="text-muted small">Status: <span class="badge bg-warning text-dark">MENUNGGU FINANCE</span></div>
+<div class="text-muted small"><i class="bi bi-info-circle"></i> Perlu transfer Rp350.000 untuk beli modem sebelum assign ke teknisi</div>
 </div>
 </div>
 
 <div class="lifecycle-step">
 <div class="lifecycle-icon lc-pending"><i class="bi bi-person-badge"></i></div>
 <div>
-<b class="text-muted">Ditugaskan ke Teknisi</b>
-<div class="text-muted small">Menunggu tahap sebelumnya selesai</div>
+<b class="text-muted">→ Ditugaskan ke Teknisi (Assignment)</b>
+<div class="text-muted small">Status: <span class="badge bg-secondary">PENDING</span></div>
+<div class="text-muted small" id="assignmentNote">Menunggu approval dari atasan + pre-bayar selesai</div>
 </div>
 </div>
 
 <div class="lifecycle-step">
 <div class="lifecycle-icon lc-pending"><i class="bi bi-tools"></i></div>
 <div>
-<b class="text-muted">Dikerjakan Teknisi</b>
+<b class="text-muted">→ Sedang Dikerjakan Teknisi</b>
+<div class="text-muted small">Status: <span class="badge bg-secondary">PENDING</span></div>
 <div class="text-muted small">Status &amp; GPS akan disinkron dari aplikasi mobile teknisi</div>
 </div>
 </div>
@@ -112,15 +117,17 @@
 <div class="lifecycle-step">
 <div class="lifecycle-icon lc-pending"><i class="bi bi-cash-coin"></i></div>
 <div>
-<b class="text-muted">Finance: TF jasa teknisi</b>
-<div class="text-muted small">Sesuai timing yang di-set admin (sebelum/sesudah)</div>
+<b class="text-muted">→ Finance: TF Jasa Teknisi</b>
+<div class="text-muted small">Status: <span class="badge bg-secondary">PENDING</span></div>
+<div class="text-muted small">Jadwal: <span class="badge badge-teal">Sesudah selesai</span> (jika admin memilih)</div>
 </div>
 </div>
 
 <div class="lifecycle-step">
 <div class="lifecycle-icon lc-pending"><i class="bi bi-flag"></i></div>
 <div>
-<b class="text-muted">Closed</b>
+<b class="text-muted">→ Closed (Selesai Tuntas)</b>
+<div class="text-muted small">Status: <span class="badge bg-secondary">PENDING</span></div>
 <div class="text-muted small">Tiket selesai &amp; seluruh pembayaran tuntas</div>
 </div>
 </div>
@@ -170,10 +177,68 @@
 <div id="actionAdmin" class="card shadow-sm mb-3" style="display:none;">
 <div class="card-header"><h6 class="mb-0">Aksi Admin</h6></div>
 <div class="card-body">
-<button class="btn btn-warning w-100 mb-2" onclick="toast('Fitur edit tiket (dummy)')"><i class="bi bi-pencil"></i> Edit Tiket</button>
+
+<!-- Button Assign (conditional) -->
+<div id="assignButtonContainer" style="display:none;" class="mb-3">
+<button class="btn btn-success w-100 mb-2" onclick="assignToTechnician()">
+<i class="bi bi-person-check"></i> Assign ke Teknisi
+</button>
+<small class="text-muted d-block mb-2">
+<i class="bi bi-info-circle"></i> Syarat terpenuhi:
+<div class="ps-3">
+✓ Atasan approve<br>
+<span id="preBayarCheck">✓ Pre-bayar selesai</span><br>
+<span id="jasaTechCheck">✓ Jasa teknisi (jika bayar sebelum)</span>
+</div>
+</small>
+</div>
+
+<!-- Blocking message when assign not available -->
+<div id="assignBlockMessage" class="alert alert-warning mb-3" style="display:none;">
+<i class="bi bi-exclamation-triangle"></i> <b>Tombol Assign belum bisa diklik</b><br>
+<small id="blockReason">Menunggu proses Finance untuk pre-bayar</small>
+</div>
+
+<!-- Other admin actions -->
+<button class="btn btn-outline-secondary w-100 mb-2" onclick="toast('Fitur edit tiket')"><i class="bi bi-pencil"></i> Edit Tiket</button>
 <button class="btn btn-outline-danger w-100" onclick="toast('Tiket dibatalkan')"><i class="bi bi-x-circle"></i> Batalkan Tiket</button>
 </div>
 </div>
+
+<script>
+// Logic untuk menampilkan/menyembunyikan button Assign
+function updateAssignButtonVisibility() {
+  const isAtsanApprove = true; // Sudah approve (lihat di Lifecycle)
+  const isPreBayarDone = false; // Masih nunggu finance
+  const isJasaTechPaidBefore = false; // Bayar sesudah jadi tidak perlu dicek
+  
+  // Button bisa diklik jika:
+  // 1. Atasan approve
+  // 2. Pre-bayar sudah selesai (jika ada)
+  // 3. Jasa teknisi sudah transfer (jika pilih bayar sebelum)
+  
+  const canAssign = isAtsanApprove && isPreBayarDone;
+  
+  const assignBtn = document.getElementById('assignButtonContainer');
+  const assignBlock = document.getElementById('assignBlockMessage');
+  
+  if (canAssign) {
+    assignBtn.style.display = 'block';
+    assignBlock.style.display = 'none';
+  } else {
+    assignBtn.style.display = 'none';
+    assignBlock.style.display = 'block';
+  }
+}
+
+function assignToTechnician() {
+  // Buka modal untuk pilih teknisi
+  toast('Fitur assign teknisi - buka modal pilih teknisi');
+}
+
+// Run saat halaman load
+updateAssignButtonVisibility();
+</script>
 
 <div id="actionAtasan" class="card shadow-sm mb-3" style="display:none;">
 <div class="card-header"><h6 class="mb-0">Aksi Atasan</h6></div>

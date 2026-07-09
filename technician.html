@@ -226,8 +226,8 @@
 <div class="row g-3">
 
 <div class="col-md-6">
-<label class="form-label">Nama Lengkap</label>
-<input type="text" class="form-control" placeholder="Nama teknisi">
+<label class="form-label"><b>Nama Lengkap (sesuai KTP) *</b></label>
+<input type="text" class="form-control" id="namaTeknisi" placeholder="Nama lengkap">
 </div>
 
 <div class="col-md-6">
@@ -249,33 +249,73 @@
 </select>
 </div>
 
-<div class="col-12"><hr></div>
+<div class="col-12"><hr class="my-2"></div>
+
+<h6 class="col-12 mb-2"><i class="bi bi-file-earmark-text text-danger"></i> Data Pribadi (Wajib)</h6>
 
 <div class="col-md-6">
-<label class="form-label fw-semibold"><i class="bi bi-tools"></i> Spesialisasi</label>
-<div class="text-muted mb-1" style="font-size:12px;">Pilih semua keahlian yang dikuasai</div>
-<div class="check-grid">
-<div class="form-check"><input class="form-check-input" type="checkbox" id="s1"><label class="form-check-label" for="s1">AC &amp; Pendingin</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="s2"><label class="form-check-label" for="s2">Kelistrikan</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="s3"><label class="form-check-label" for="s3">Plumbing / Pipa</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="s4"><label class="form-check-label" for="s4">Jaringan / Networking</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="s5"><label class="form-check-label" for="s5">CCTV</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="s6"><label class="form-check-label" for="s6">Genset</label></div>
-</div>
+<label class="form-label"><b>Nomor KTP *</b></label>
+<input type="text" class="form-control" placeholder="16xxxxxxxxxxxxxxx" maxlength="16">
 </div>
 
 <div class="col-md-6">
-<label class="form-label fw-semibold"><i class="bi bi-geo-alt"></i> Wilayah Kerja</label>
-<div class="text-muted mb-1" style="font-size:12px;">Area yang bisa dijangkau teknisi</div>
-<div class="check-grid">
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w1"><label class="form-check-label" for="w1">Depok</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w2"><label class="form-check-label" for="w2">Jakarta Selatan</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w3"><label class="form-check-label" for="w3">Jakarta Pusat</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w4"><label class="form-check-label" for="w4">Jakarta Barat</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w5"><label class="form-check-label" for="w5">Bogor</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w6"><label class="form-check-label" for="w6">Tangerang</label></div>
-<div class="form-check"><input class="form-check-input" type="checkbox" id="w7"><label class="form-check-label" for="w7">Bekasi</label></div>
+<label class="form-label"><b>Nama di KTP *</b></label>
+<input type="text" class="form-control" id="namaKTP" placeholder="Harus sama dengan Nama Lengkap di atas">
+<small class="text-danger d-none" id="ktpWarning"><i class="bi bi-exclamation-triangle"></i> Nama KTP harus sama dengan Nama Lengkap</small>
 </div>
+
+<div class="col-md-6">
+<label class="form-label"><b>Nomor NPWP *</b></label>
+<input type="text" class="form-control" placeholder="15xxxxxxxxxxxxxxx" maxlength="15">
+</div>
+
+<div class="col-md-6">
+<label class="form-label"><b>Nomor Rekening Bank *</b></label>
+<input type="text" class="form-control" placeholder="12xxxxxxxxxx">
+</div>
+
+<div class="col-12">
+<label class="form-label"><b>Bank</b></label>
+<select class="form-select">
+<option>Pilih Bank</option>
+<option>BCA</option>
+<option>Mandiri</option>
+<option>BNI</option>
+<option>CIMB Niaga</option>
+<option>BTN</option>
+<option>OVO</option>
+<option>Dana</option>
+<option>Lainnya</option>
+</select>
+</div>
+
+<div class="col-12"><hr class="my-2"></div>
+
+<div class="col-md-6">
+<label class="form-label fw-semibold"><i class="bi bi-tools"></i> Spesialisasi *</label>
+<div class="text-muted mb-2" style="font-size:12px;">Pilih semua keahlian (hold Ctrl/Cmd untuk multi-select)</div>
+<select class="form-select" multiple size="5">
+<option value="AC & Pendingin">AC &amp; Pendingin</option>
+<option value="Kelistrikan">Kelistrikan</option>
+<option value="Plumbing">Plumbing / Pipa</option>
+<option value="Jaringan">Jaringan / Networking</option>
+<option value="CCTV">CCTV</option>
+<option value="Genset">Genset</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label fw-semibold"><i class="bi bi-geo-alt"></i> Wilayah Kerja *</label>
+<div class="text-muted mb-2" style="font-size:12px;">Area yang bisa dijangkau (hold Ctrl/Cmd untuk multi-select)</div>
+<select class="form-select" multiple size="5">
+<option value="Depok">Depok</option>
+<option value="Jakarta Selatan">Jakarta Selatan</option>
+<option value="Jakarta Pusat">Jakarta Pusat</option>
+<option value="Jakarta Barat">Jakarta Barat</option>
+<option value="Bogor">Bogor</option>
+<option value="Tangerang">Tangerang</option>
+<option value="Bekasi">Bekasi</option>
+</select>
 </div>
 
 <div class="col-12"><hr></div>
